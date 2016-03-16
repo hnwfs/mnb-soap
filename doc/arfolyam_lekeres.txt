@@ -1,0 +1,161 @@
+
+   TÁJÉKOZTATÓ
+
+AKTUÁLIS ÉS A RÉGEBBI ÁRFOLYAMOK WEBSZOLGÁLTATÁSÁNAK DOKUMENTÁCIÓJA
+
+
+Cím           : Budapest V. ker., Szabadság tér 8—9.
+Levelezési cím: 1850 Budapest
+Telefon       : +36 1 428 26 00
+Fax           : +36 1 428 25 00
+
+1 AZ ÁRFOLYAMOK WEBSZOLGÁLTATÁSA
+
+A szolgáltatás két fő részből áll:
+
+1.
+Weben keresztül elérhető illesztés (Arfolyamok.asmx).  Ez (.NET-es
+fejlesztésű szolgáltatás lévén) egy egyszerű szövegfájl, amely azt
+határozza  meg,  hogy a kívülről érkező szolgáltatáshívások melyik
+komponens felé legyenek továbbítva.
+
+2.
+Szolgáltató komponens (MNBArfolyamok.dll). Ez a komponens  felelős
+az MNB rendszerben az árfolyamokkal kapcsolatos teendők elvégzésé-
+ért, mind  a  publikus  kérések, mind az árfolyamfrissítés, mind a
+webszolgáltatás tekintetében.
+
+1.1 Be- és kimeneti adatok
+
+Az egyszerűség kedvéért minden be- és kimenetben szereplő adat
+típusa string:
+
+Minden kimenet string, amely egy XML dokumentum forráskódja.
+
+Megjegyzés: a kimenetekben, a dátum típusú értékek ISO 8601
+formátumúak: idő és időzóna nélkül YYYY-MM-DD, pl: "2015-04-07".
+
+
+2 METÓDUSOK:
+
+A szolgáltatás három metódussal rendelkezik, ebből kettő lekérdező,
+és egy informatív metódus van. A szolgáltatáshoz kapcsolódó  alkal-
+mazások fejlesztőinek javasoljuk,  hogy először a GetInfo  metódust
+kérdezzék le, amely alapján elegendő adathoz jut az alkalmazás ahhoz,
+hogy hibátlan lekérdezéseket építhessen fel.
+
+2.1 GetInfo
+    Bemenet: nincs
+    Kimenet: string
+
+Feladata: Információt szolgáltatni a lekérdezhető adatokról.
+
+Visszaadja azt az időintervallumot, amelyben lehetséges a lekérdezés,
+valamint felsorolja a lekérdezhető devizaneveket. A visszaadott XML
+egy részlete 20015-07-16-án:
+
+<MNBExhangeRatesQueryValues>
+  <FirstDate>1949-01-03</FirstDate>
+  <LastDate>2015-07-16</LastDate>
+  <Currencies>
+    <Curr>AED</Curr>
+    <Curr>AFD</Curr>
+    <Curr>ATS</Curr>
+    ...
+    <Curr>XTR</Curr>
+    <Curr>YUD</Curr>
+  </Currencies>
+</MNBExhangeRatesQueryValues>
+
+2.2 GetCurrentExchangeRates
+    Bemenet: nincs
+    Kimenet: string
+
+Feladata: A legutolsó napi jegyzés árfolyamtáblázatát adja vissza.
+Az adatok között csak az adott napon jegyzett devizák szerepelnek.
+A visszaadott XML 2004-07-16-án:
+
+<MNBCurrentExchangeRates>
+  <Day date="2004-07-16">
+    <Rate curr="AUD" unit="1">146,3</Rate>
+    <Rate curr="CAD" unit="1">153,19</Rate>
+    <Rate curr="CHF" unit="1">163,76</Rate>
+    <Rate curr="CZK" unit="1">7,97</Rate>
+    <Rate curr="DKK" unit="1">33,64</Rate>
+    <Rate curr="EUR" unit="1">250,1</Rate>
+    <Rate curr="GBP" unit="1">374,97</Rate>
+    <Rate curr="JPY" unit="100">184,53</Rate>
+    <Rate curr="NOK" unit="1">29,55</Rate>
+    <Rate curr="PLN" unit="1">56,38</Rate>
+    <Rate curr="SEK" unit="1">27,21</Rate>
+    <Rate curr="SKK" unit="1">6,27</Rate>
+    <Rate curr="USD" unit="1">202,15</Rate>
+  </Day>
+</MNBCurrentExchangeRates>
+
+2.3 GetExchangeRates
+    Bemenet: string startDate, string endDate, string currencyNames
+    Kimenet: string.
+
+Feladata: Az átadott paramétereknek megfelelő árfolyamtáblázatot adja
+vissza. A dátumokat célszerű év-hó-nap formában (kötőjellel, vagy
+ponttal elválasztva) megadni, a devizaneveket vesszővel elválasztva,
+a három nagybetűs rövidítésükkel kell megadni.
+Példa a lekérdezés hívására:
+
+GetExchangeRates=("2014-07-14", "2014-07-16", "RUB,SGD");
+
+A fenti hívás eredménye:
+<MNBExchangeRates>
+    <Day date="2015-04-14">
+        <Rate curr="RUB" unit="1">5,4</Rate>
+        <Rate curr="SGD" unit="1">206,04</Rate>
+    </Day>
+    <Day date="2015-04-15">
+        <Rate curr="RUB" unit="1">5,54</Rate>
+        <Rate curr="SGD" unit="1">205,61</Rate>
+    </Day>
+    <Day date="2015-04-16">
+        <Rate curr="RUB" unit="1">5,67</Rate>
+        <Rate curr="SGD" unit="1">208,49</Rate>
+    </Day>
+    <Day date="2015-04-17">
+        <Rate curr="RUB" unit="1">5,51</Rate>
+        <Rate curr="SGD" unit="1">207,62</Rate>
+    </Day>
+</MNBExchangeRates>
+
+Amennyiben nem helyesek a bemeneti adatok, akkor két eset lehetséges:
+vagy üres az eredmény-dokumentum, vagy olyan dokumentumot kapunk,
+amely hibaüzenetet tartalmaz.
+
+Üres dokumentumot kapunk, ha 
+
+--[ A megadott időintervallumban nem volt jegyzés, a kért devizákra.
+--[ A startDate nagyobb mint az endDate.
+--[ A devizanevek helytelenek.
+
+Hibaüzenetet akkor kapunk akkor, ha valamelyik dátum hibás:
+
+<MNBExchangeRates>
+    <Error>Invalid startDate</Error>
+</MNBExchangeRates>
+
+Vagy:
+
+<MNBExchangeRates>
+    <Error>Invalid endDate</Error>
+</MNBExchangeRates>
+
+Amennyiben a webszolgáltatás működik, de valamilyen oknál fogva nem
+érhető el az adatforrás, akkor az alábbi üzenetet kapjuk:
+
+<MNBExchangeRates>
+    <Error>"The server is not available</Error>
+</MNBExchangeRates>
+
+Amennyiben kérdése van, vagy támogatásra van szüksége, kérjük levélben
+keresse meg a WebMestert (webmaster@mnb.hu).
+
+Budapest, 2010.12.20.
+MAGYAR NEMZETI BANK

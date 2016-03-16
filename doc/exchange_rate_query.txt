@@ -1,0 +1,153 @@
+
+INFORMATION
+
+DOCUMENTATION OF WEB SERVICES FOR ACTUAL AND FORMER EXCHANGE RATES
+
+Address     : Budapest V. ker.,Szabadság tér 8—9.
+Mail address: 1850 Budapest
+Telephone   : +36 1 428 26 00
+Fax         : +36 1 428 25 00
+
+1 WEB SERVICE FOR EXCHANGE RATES
+
+The service includes two main components:
+
+1.
+Interface accessible through the Web (Arfolyamok.asmx). This is (being
+a .NET based service) a simple text file that defines the component to
+which the external incoming service requests will be forwarded.
+
+2.
+Service component (MNBArfolyamok.dll). This component is responsible
+for completion of tasks concerning exchange rates in the MNB system
+with regard to public requests, exchange rate updates and Web service.
+
+1.1   Data inputs and outputs
+
+For the sake of simplicity, all input and output data are strings:
+All outputs are strings, that are source codes of an XML document.
+Remark: the format of the date-type values in the outputs is ISO 8601:
+without time and time zone (YYYY-MM-DD, e.g.: "2015-04-07").
+
+2  METHODS
+
+The service provides three methods, two of them are interrogating
+methods and one is an informative method. For developers of
+applications connecting to the service, we recommend to interrogate
+the GetInfo method first, and based on this, the application receives
+sufficient data for building up correct queries.
+
+2.1   GetInfo
+    Input: none.
+    Output: string.
+
+Task: To provide information on retrievable data.
+Returns the time interval available for query and lists the currency
+names available for query. Excerpt from the returned XML on 16-07-2014:
+
+<MNBExhangeRatesQueryValues>
+  <FirstDate>1949-01-03</FirstDate>
+  <LastDate>2015-07-16</LastDate>
+  <Currencies>
+    <Curr>AED</Curr>
+    <Curr>AFD</Curr>
+    <Curr>ATS</Curr>
+    ...
+    <Curr>XTR</Curr>
+    <Curr>YUD</Curr>
+  </Currencies>
+</MNBExhangeRatesQueryValues>
+
+2.2 GetCurrentExchangeRates
+    Input: none.
+    Output: string.
+
+Task: Returns the exchange rate table of the last day’s quotation.
+The data include only the currencies quoted on the particular day.
+The returned XML on 16-04-2004:
+
+<MNBCurrentExchangeRates>
+    <Day date="2004-07-16">
+        <Rate curr="AUD" unit="1">146,3</Rate>
+        <Rate curr="CAD" unit="1">153,19</Rate>
+        <Rate curr="CHF" unit="1">163,76</Rate>
+        <Rate curr="CZK" unit="1">7,97</Rate>
+        <Rate curr="DKK" unit="1">33,64</Rate>
+        <Rate curr="EUR" unit="1">250,1</Rate>
+        <Rate curr="GBP" unit="1">374,97</Rate>
+        <Rate curr="JPY" unit="100">184,53</Rate>
+        <Rate curr="NOK" unit="1">29,55</Rate>
+        <Rate curr="PLN" unit="1">56,38</Rate>
+        <Rate curr="SEK" unit="1">27,21</Rate>
+        <Rate curr="SKK" unit="1">6,27</Rate>
+        <Rate curr="USD" unit="1">202,15</Rate>
+    </Day>
+</MNBCurrentExchangeRates>
+
+2.3 GetExchangeRates
+    Input: startDate string, endDate string, currencyNames string.
+    Output: string.
+
+Task: Returns the exchange rate table according to the delivered
+parameters. It is advisable to specify the dates in form of
+year-month-day (separated by hyphens or dots), the currency names
+should be specified by their abbreviated three-letter names
+(capital letters), separated by commas. Example for requesting a
+query:
+
+GetExchangeRates=("2014-07-14", "2014-07-16", "RUB,SGD");
+
+Result of the above request: 
+
+<MNBExchangeRates>
+    <Day date="2015-04-14">
+        <Rate curr="RUB" unit="1">5,4</Rate>
+        <Rate curr="SGD" unit="1">206,04</Rate>
+    </Day>
+    <Day date="2015-04-15">
+        <Rate curr="RUB" unit="1">5,54</Rate>
+        <Rate curr="SGD" unit="1">205,61</Rate>
+    </Day>
+    <Day date="2015-04-16">
+        <Rate curr="RUB" unit="1">5,67</Rate>
+        <Rate curr="SGD" unit="1">208,49</Rate>
+    </Day>
+    <Day date="2015-04-17">
+        <Rate curr="RUB" unit="1">5,51</Rate>
+        <Rate curr="SGD" unit="1">207,62</Rate>
+    </Day>
+</MNBExchangeRates>
+
+If input data are incorrect, two cases are possible: the resulting
+document is empty, or the resulting document includes an error message.
+The document is empty, if:
+
+-[ There was no quotation for the requested currencies in the specified time interval.
+-[ The value of startDate is later than endDate.
+-[ Currency names are incorrect.
+
+An error message appears if any date is incorrect:
+
+<MNBExchangeRates>
+    <Error>Invalid startDate</Error>
+</MNBExchangeRates>
+
+Or
+
+<MNBExchangeRates>
+    <Error>Invalid endDate</Error>
+</MNBExchangeRates>
+
+If the Web service is operating but the data source is unavailable
+for some reasons, the following message appears:
+
+<MNBExchangeRates>
+    <Error>"The server is not available</Error>
+</MNBExchangeRates>
+
+Should you have any questions or require support, please contact the
+WebMaster: webmasters@mnb.hu
+
+Budapest, 12 December 2010
+
+MAGYAR NEMZETI BANK
