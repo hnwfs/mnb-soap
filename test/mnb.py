@@ -21,5 +21,5 @@ else:
     table = lxml.html.parse(url)
     for trs in table.xpath('//table[@class="datatable"]/tbody'):
         for i in trs.xpath('tr'):
-            if i.xpath('td[1]/text()')[0] == cod:
+            if i.xpath('td[0]/text()')[0] == cod:
                 print '\n\t', i.xpath(val)[0], (i.xpath(txt)[0]), i.xpath(cur)[0], 'forint'
