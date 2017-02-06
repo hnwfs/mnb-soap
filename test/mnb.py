@@ -1,25 +1,31 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import lxml.html, sys
+# coded by: csörnyeföldi
+# (c) 2015 Lineo       <szegeny_legeny@yahoo.hu>
+# (c) 2015 KURUC license for hungarians and russians
+# for jews cost 100.000,- HUF
 
-supported = ['AUD', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP',
-             'HRK', 'ISK', 'JPY', 'KRW', 'NOK', 'NZD', 'PLN', 'RUB',
-             'SEK', 'SGD', 'TRY', 'USD']
+#   This sample get from Magyar Nemzeti Bank (Hungarian National Bank)
+#   the actual exchange rate from supported currencies & HUF.
 
-if len(sys.argv) <> 2:
-    print sys.argv[0], '<valuta kód>'
-elif sys.argv[1].upper() not in supported:
-    print '\n\tnem érvényes valuta kód:', sys.argv[1].upper()
-else:
-    val = 'td[3]/text()'
-    cur = 'td[4]/text()'
-    txt = 'td[2]/text()'
-    cod = sys.argv[1].upper()
+import lxml.html
 
-    url = 'http://www.mnb.hu/arfolyamok'
-    table = lxml.html.parse(url)
-    for trs in table.xpath('//table[@class="datatable"]/tbody'):
-        for i in trs.xpath('tr'):
-            if i.xpath('td[0]/text()')[0] == cod:
-                print '\n\t', i.xpath(val)[0], (i.xpath(txt)[0]), i.xpath(cur)[0], 'forint'
+url = 'http://www.mnb.hu/arfolyamok'
+
+def get_currency_exchange():
+
+    a = lxml.html.parse(url)
+    b = {}
+
+    for t in a.xpath('//div[@class="exchangeTable"]'):
+        for i in t.xpath('//table/tbody/tr'):
+            b[str(i.xpath('td/b/text()')[0])] = i.xpath('td/text()')
+            b[str(i.xpath('td/b/text()')[0])].append(i.xpath('td/b/text()')[0])
+
+    # [ devizanév   -  egység - érték -  pénznem
+    # ['orosz rubel',   '1',   '4,89',    'RUB']
+    return b
+
+def teszt(cur_code):
+    i = get_currency_exchange()[cur_code]
+    print "\n\t" + i[1] + " " + i[0] + " = " + i[2] + " forint"
