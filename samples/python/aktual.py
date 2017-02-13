@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# coded by: Vatay Világi Norbert aka csörnyeföldi
+# code by: csörnyeföldi
 # (c) 2015 Lineo       <szegeny_legeny@yahoo.hu>
-# (c) 2015 KURUC license for hungarrian and russian
-# for yewish and usa people & companies cost 100.000,- HUF
-# for other people & companies cost 5.000,- HUF
+# (c) 2015 KURUC license for hungarians and russians
+# for jews cost 100.000,- HUF
 
 """ This sample get from Magyar Nemzeti Bank (Hungarian National Bank)
     the actual exchange rate from supported currencies & HUF. """
