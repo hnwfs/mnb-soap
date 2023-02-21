@@ -1,31 +1,29 @@
 # -*- coding: utf-8 -*-
 
-# coded by: csörnyeföldi
-# (c) 2015 Lineo       <szegeny_legeny@yahoo.hu>
-# (c) 2015 KURUC license for hungarians and russians
-# for jews cost 100.000,- HUF
+# coded by: Világi Norbert
+# (c) 2015 Lineo <szegeny_legeny@yahoo.hu>
 
-#   This sample get from Magyar Nemzeti Bank (Hungarian National Bank)
-#   the actual exchange rate from supported currencies & HUF.
+# 2023 02.21 revision - actualisation
 
-import lxml.html
+from lxml import html
+from urllib2 import urlopen
 
-url = 'http://www.mnb.hu/arfolyamok'
+url = 'https://www.mnb.hu/arfolyamok'
 
 def get_currency_exchange():
-
-    a = lxml.html.parse(url)
+    d = urlopen(url)
+    a = html.parse(d)
     b = {}
 
-    for t in a.xpath('//div[@class="exchangeTable"]'):
+    for t in a.xpath('//div[@class="c-txt"]'):
         for i in t.xpath('//table/tbody/tr'):
-            b[str(i.xpath('td/b/text()')[0])] = i.xpath('td/text()')
-            b[str(i.xpath('td/b/text()')[0])].append(i.xpath('td/b/text()')[0])
+            b[str(i.xpath('td/text()')[0])] = i.xpath('td/text()')
+            b[str(i.xpath('td/text()')[0])].append(i.xpath('td/text()')[0])
 
-    # [ devizanév   -  egység - érték -  pénznem
-    # ['orosz rubel',   '1',   '4,89',    'RUB']
     return b
 
-def teszt(cur_code):
+
+
+def = test(cur_code):
     i = get_currency_exchange()[cur_code]
-    print "\n\t" + i[1] + " " + i[0] + " = " + i[2] + " forint"
+    print '\n\t' + i[2] + ' ' + i[1] + ' = ' +i[3] + ' forint'

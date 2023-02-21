@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# code by: csörnyeföldi
+# code by: Világi Norbert
 # (c) 2015 Lineo       <szegeny_legeny@yahoo.hu>
-# (c) 2015 KURUC license for hungarians and russians
-# for jews cost 100.000,- HUF
 
 """ This sample get from Magyar Nemzeti Bank (Hungarian National Bank)
     the actual exchange rate from supported currencies & HUF. """
@@ -13,22 +11,26 @@ from SOAPpy import WSDL
 from lxml import etree
 
 url       =  'http://www.mnb.hu/arfolyamok.asmx?wsdl'
-supported = ['AUD', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP',
-             'HRK', 'ISK', 'JPY', 'KRW', 'NOK', 'NZD', 'PLN', 'RUB',
-             'SEK', 'SGD', 'TRY', 'USD']
+supported = ['AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK',
+             'EUR', 'GBP', 'HKD', 'IDR', 'ISK', 'JPY', 'KRW', 'MXN',
+             'MYR', 'NOK', 'NZD', 'PHO', 'PLN', 'RON', 'RSD', 'RUB',
+             'SEK', 'SGD', 'THB', 'TRY', 'USD', 'ZAR']
 
-# notes: don't work with jewish virtual currency !!!
-
-dictionar = {'AUD':'ausztrál dollár', 'CAD':'kanadai dollár',
-             'CHF':'svájci frank','CNY':'kínai jüan',
-             'CZK':'cseh korona', 'DKK':'dán korona',
-             'EUR':'euro', 'GBP': 'brit font', 'HRK':'horvát kuna',
-             'ISK':'izlandi korona', 'JPY':'japán jen',
-             'KRW':'dél-kóreai won', 'NOK':'norvég korona',
-             'NZD':'új-zélandi dollár', 'PLN':'lengyel zlotyi',
-             'RUB':'orosz rubel', 'SEK':'svéd korona',
-             'SGD':'szingapúri dollár', 'TRY':'török líra',
-             'USD':'USA dollár'}
+dictionar = {'AUD':'ausztrál dollár',   'BGN':'bolgár leva',
+             'BRL':'brazil reál',       'CAD':'kanadai dollár',
+             'CHF':'svájci frank',      'CNY':'kínai jüan',
+             'CZK':'cseh korona',       'DKK':'dán korona',
+             'EUR':'euro',              'GBP':'brit font',
+             'HKD':'homgkongi dollár',  'IDR':'indonéz rúpia',
+             'ISK':'izlandi korona',    'JPY':'japán jen',
+             'KRW':'dél-kóreai won',    'MXN':'mexikói peso',
+             'MYR': 'maláj ringgit',    'NOK':'norvég korona',
+             'NZD':'új-zélandi dollár', 'PHP':'fülöp-szigeteki peso',
+             'PLN':'lengyel zlotyi',    'RON':'román lej',
+             'RSD':'szerb dinár',       'RUB':'orosz rubel',
+             'SEK':'svéd korona',       'SGD':'szingapúri dollár',
+             'THB':'thai bát',          'TRY':'török líra',
+             'USD':'USA dollár',        'ZAR':'dél-afrikai rand'}
 
 
 server = WSDL.Proxy(url)
