@@ -1,3 +1,31 @@
+Metadata-Version: 2.1
+Name: MNB-soap
+Version: 0.1
+Summary: MNB soap client
+Home-page: https://github.com/hnwfs/mnb-soap
+Author: Világi Norbert
+Author-email: Világi Norbert <vilagi@alwaysdata.net>
+Project-URL: Homepage, https://github.com/hnwfs/mnb-soap
+Project-URL: Bug Tracker, https://github.com/hnwfs/mnb-soap/issues
+Platform: any
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.1
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=2.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # MNB SOAP client module
 
 ## Background
@@ -12,7 +40,7 @@ The official documentation of their API is available here [in hungarian](https:/
 
   or you can install it with any PyPI-compatible package manager
 
-  pip install MNB-soap
+  pip install mnb-soap
 
 ## Sample:
 
@@ -25,6 +53,7 @@ a = getCurrencyRate()
 print (a.getCurrencies())
 print ('1 japán yen = {} hungarian forint', a.getActual('JPY'))
 print (a.getHistoricalData('2023-03-01','2023-03-20','JPY'))
+end
 ```
 # Python version:
 

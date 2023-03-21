@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+src/MNB_soap.egg-info/PKG-INFO
+src/MNB_soap.egg-info/SOURCES.txt
+src/MNB_soap.egg-info/dependency_links.txt
+src/MNB_soap.egg-info/requires.txt
+src/MNB_soap.egg-info/top_level.txt
+src/mnb/__init__.py
+src/mnb/mnb.py
